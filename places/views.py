@@ -9,6 +9,7 @@ from rest_framework import renderers
 from places.serializers import PlaceSerializer, UserSerializer, CategorySerializer, RatedPlaceSerializer
 from places.models import Place, User,Category, RatedPlace
 from rest_framework.response import Response
+from random import randint
 
 
 class PlaceViewSet(viewsets.ModelViewSet):
@@ -22,8 +23,10 @@ class PlaceViewSet(viewsets.ModelViewSet):
     @list_route()
     def random(self, request, *args, **kwargs):
         count = Place.objects.count()
-        places =Place.objects.all()
-        return Response(count)
+        random = randint(0, count-10 )
+        places = Place.objects.all().limit(10).skip(random)
+        serializer = PlaceSerializer(places, many=True)
+        return Response(serializer.data)
 
 
 class RatedPlaceViewSet(viewsets.ModelViewSet):
