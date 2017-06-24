@@ -11,7 +11,9 @@ from places.models import Place, User,Category, RatedPlace
 from rest_framework.response import Response
 from random import randint
 
-
+############################
+########PlaceViewSet########
+############################
 class PlaceViewSet(viewsets.ModelViewSet):
 
     lookup_field = 'id'
@@ -20,6 +22,7 @@ class PlaceViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Place.objects.all()
 
+    ########Random places
     @list_route()
     def random(self, request, *args, **kwargs):
         count = Place.objects.count()
@@ -29,6 +32,9 @@ class PlaceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+############################
+######RatedPlaceViewSet#####
+############################
 class RatedPlaceViewSet(viewsets.ModelViewSet):
 
     lookup_field = 'id'
@@ -45,6 +51,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Category.objects.all()
 
 
+############################
+########UserViewSet#########
+############################
 class UserViewSet(viewsets.ModelViewSet):
 
     lookup_field = 'id'
@@ -53,7 +62,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return User.objects.all()
 
-    #User recommended places
+    ########User recommended places
     @detail_route()
     def places(self, request, *args, **kwargs):
         snippet = self.get_object()
@@ -62,7 +71,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
         userId = kwargs.get("id")
         listPlaces = []
-        secondListPlaces = listPlaces[:]
 
         user = User.objects(id=userId).get()
         userTypes = user.types
@@ -83,13 +91,15 @@ class UserViewSet(viewsets.ModelViewSet):
                     else:
                         rating = ''
                     place.user_rated = rating
-                    secondListPlaces.append(place)
 
-        serializer = PlaceSerializer(secondListPlaces, many=True)
+                    #Adding places to list of recommended places
+                    listPlaces.append(place)
+
+        serializer = PlaceSerializer(listPlaces, many=True)
 
         return Response(serializer.data)
 
-    #User choosen categories
+    ########User choosen categories
     @detail_route()
     def categories(self, request, *args, **kwargs):
 
