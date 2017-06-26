@@ -4,12 +4,6 @@ from rest_framework import serializers
 
 from rest_framework_mongoengine import serializers
 
-#class UserSerializer(serializers.HyperlinkedModelSerializer):
-#class Meta:
-#     model = User
-#        fields = ('url', 'username', 'email')
-
-
 class PlaceSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Place

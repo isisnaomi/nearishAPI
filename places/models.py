@@ -16,7 +16,8 @@ class Place(Document):
 
     types = fields.DynamicField(null=True)
     photo_reference = fields.StringField()
-    user_rated = fields.StringField()
+    user_rating = fields.StringField()
+    twitter_rating = fields.StringField()
 
 class User(Document):
     name = fields.StringField()

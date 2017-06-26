@@ -25,9 +25,6 @@ router.register(r'users', views.UserViewSet, 'Users'),
 router.register(r'users/(?P<username>\w{0,50})/places', snippet_user_places, 'snippet-user'),
 router.register(r'categories', views.CategoryViewSet, 'Category'),
 
-
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-token-auth/', obtain_jwt_token),

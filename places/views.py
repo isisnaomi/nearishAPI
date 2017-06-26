@@ -90,10 +90,13 @@ class UserViewSet(viewsets.ModelViewSet):
                         rating = userRating.get().rating
                     else:
                         rating = ''
-                    place.user_rated = rating
+                    place.user_rating = rating
 
                     #Adding places to list of recommended places
                     listPlaces.append(place)
+
+                    # Sort the list according to user rated
+                    listPlaces.sort(key=lambda x: x.user_rating, reverse=True)
 
         serializer = PlaceSerializer(listPlaces, many=True)
 
