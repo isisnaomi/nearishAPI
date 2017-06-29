@@ -29,4 +29,7 @@ class RatedPlace(Document):
     user_id = fields.StringField()
     rating = fields.DynamicField()
 
-
+class Tweet(Document):
+    username = fields.StringField()
+    text = fields.StringField()
+    hashtags = fields.ListField(fields.StringField())

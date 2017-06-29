@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from rest_framework_mongoengine import viewsets
 from rest_framework import renderers
 from places.serializers import PlaceSerializer, UserSerializer, CategorySerializer, RatedPlaceSerializer
-from places.models import Place, User,Category, RatedPlace
+from places.models import Place, User,Category, RatedPlace, Tweet
 from rest_framework.response import Response
 from random import randint
 
@@ -84,6 +84,10 @@ class UserViewSet(viewsets.ModelViewSet):
             for place in places:
                 if typeName in place.types:
 
+                    # Rating place according to twitter
+                    twitterRating = len(Tweet.objects(text__contains= place.name))
+                    place.twitter_rating = twitterRating
+
                     #Rating place according to user
                     userRating = RatedPlace.objects(Q(user_id=userId) & Q(place_id=place.id) )
                     if userRating:
@@ -94,6 +98,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
                     #Adding places to list of recommended places
                     listPlaces.append(place)
+
+                    # Sort the list according to twitter rated
+                    listPlaces.sort(key=lambda x: x.twitter_rating, reverse=True)
 
                     # Sort the list according to user rated
                     listPlaces.sort(key=lambda x: x.user_rating, reverse=True)
