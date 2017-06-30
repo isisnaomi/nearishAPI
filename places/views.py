@@ -62,6 +62,23 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return User.objects.all()
 
+    @list_route()
+    def credentials(self, request, *args, **kwargs):
+        email = request.query_params['email']
+        password = request.query_params['password']
+
+        user = User.objects(Q(email=email) & Q(password=password))
+
+        if(len(user) == 1):
+            serializer = UserSerializer(user, many=True)
+
+            return Response(serializer.data)
+        else:
+            return Response(False)
+
+
+
+
     ########User recommended places
     @detail_route()
     def places(self, request, *args, **kwargs):
