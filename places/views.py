@@ -27,7 +27,11 @@ class PlaceViewSet(viewsets.ModelViewSet):
     def random(self, request, *args, **kwargs):
         count = Place.objects.count()
         random = randint(0, count-10 )
-        places = Place.objects.all().limit(10).skip(random)
+        places = Place.objects(Q(types__contains="restaurant") | Q(types__contains= "bar")| Q(types__contains= "food")|
+                               Q(types__contains= "bakery") | Q(types__contains= "cafe")| Q(types__contains= "casino") |
+                               Q(types__contains= "convenience_store") | Q(types__contains= "meal_delivery") |
+                               Q(types__contains= "make_takeaway") | Q(types__contains= "nightclub") |
+                               Q(types__contains= "shopping_mall")).limit(10).skip(random)
         serializer = PlaceSerializer(places, many=True)
         return Response(serializer.data)
 
@@ -122,7 +126,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     # Sort the list according to user rated
                     listPlaces.sort(key=lambda x: x.user_rating, reverse=True)
 
-        serializer = PlaceSerializer(listPlaces, many=True)
+        serializer = PlaceSerializer(listPlaces[:20], many=True)
 
         return Response(serializer.data)
 
