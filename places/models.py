@@ -21,6 +21,8 @@ class Place(Document):
 
 class User(Document):
     name = fields.StringField()
+    password = fields.StringField()
+    email = fields.StringField()
     types = fields.ListField(fields.StringField())
 
 
