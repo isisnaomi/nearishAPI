@@ -110,9 +110,14 @@ class UserViewSet(viewsets.ModelViewSet):
                     place.twitter_rating = twitterRating
 
                     #Rating place according to user
-                    userRating = RatedPlace.objects(Q(user_id=userId) & Q(place_id=place.id) )
+                    userRating = RatedPlace.objects(Q(user_id__exact=userId) & Q(place_id__exact=place.id) )
+                    print userId
+                    print place.id
+                    print userRating
+
                     if userRating:
-                        rating = userRating.get().rating
+
+                        rating = userRating.order_by('-id').first().rating
                     else:
                         rating = ''
                     place.user_rating = rating
