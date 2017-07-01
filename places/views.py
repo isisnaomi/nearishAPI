@@ -95,12 +95,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
         user = User.objects(id=userId).get()
         userTypes = user.types
-
+        if not userTypes:
+            userTypes = ['594c36a033cbb6eed6f364e6','594c36b233cbb6eed6f364f2','594c368633cbb6eed6f364da','594c4a504362de3d8fae464f','5956fee67d2bf938c292e0bc']
 
         places =  Place.objects(Q(loc__near=[float(lat), float(lng)]))
 
         for type in userTypes:
             typeName = Category.objects(id=type).get().name
+
 
             for place in places:
                 if typeName in place.types:
